@@ -1,6 +1,6 @@
 # CSP APP — Install Flow Visual Spec v1.5.1 (Pratibimb Redesign)
 
-**Date:** April 15, 2026
+**Date:** April 15, 2026 (rev 2 — English audit + banner JSON migration + debug panel language toggle)
 **Supersedes:** [`Install_Flow_Visual_Spec_v1.5.md`](https://github.com/wiom-tech/wiom-csp-app-apr09/blob/release-01/docs/features/install-flow/Install_Flow_Visual_Spec_v1.5.md) (April 9, 2026)
 **Surface:** Install Flow (assignment → scheduling → dispatch → delegation → work module → verification → closure)
 **Depends on:**
@@ -34,6 +34,13 @@
 | 16 | **Slot-data callback fix** — `onSlotSubmitted(id, s1d, s1t, s2d, s2t)` now threads slot data through 4 files | source-tree bug |
 | 17 | **Home card `reasonTimerDisplay` drift fix** — INS-1052 uses respectful plural (was drifting from banner) | validator-caught |
 | 18 | **Missing label `cta.start_installation`** added — was rendering `[cta.start_installation]` placeholder | source-tree drift |
+| 19 | **Banner strings migrated to JSON** — all 31 `banner.*` keys live in `install_labels_v1.4_hi_en.json`; `InstallStateBanner.kt` reads them via `WiomLabels.get()` / `format()`. No more Unicode-escape hardcoded strings in the banner source. | English UX audit (rev 2) |
+| 20 | **English audit fixes** — 5 High + 4 Medium items corrected (see §10 value tables) | English UX audit (rev 2) |
+| 21 | **"Wiom" is the English brand spelling** — not "Vyom" and not "System". `reason.submitted` en now "Wiom is verifying". `banner.verification_pending.subtitle` en "Wiom is checking". Hindi uses `व्योम` (phonetic). | Abhishek directive 2026-04-15 |
+| 22 | **"Setup in progress" replaces "Install in progress"** — English register shift matches the Hindi सेटअप register. | Abhishek directive 2026-04-15 |
+| 23 | **`executor.title` in install bundle DELETED** — was shadowed by restore bundle's `"Who will fix?"` via alphabetical flat-merge. Install code must only use `executor.install.title` (= "Who will work on this setup?"). | Cross-bundle collision fix + audit |
+| 24 | **`cta.dispatch` = "Start"** — no more `"Start / Dispatch"` placeholder. | Audit grammar fix |
+| 25 | **Debug panel Language toggle** — `WiomLabels.currentLang` persisted via SharedPreferences, flipped from HomeDebugScreen via FilterChip + `Activity.recreate()`. Default `LANG_HI`, user can switch to `LANG_EN` on device to audit English UX live. | Abhishek directive 2026-04-15 |
 
 Plus all v1.4 → v1.5 changes still apply (card = 2 lines + no CTA, badge on line 2, delegation states, end transition unification, RESOLVED no auto-dismiss, CSP accountability model).
 
@@ -886,29 +893,31 @@ v1.5.1 updates values for 15 keys from v1.5, adds 4 required keys (`drilldown.ex
 
 ### 10.1 Flow keys (8)
 
-| Key | v1.5.1 Hindi | v1.5 Hindi (if changed) | English |
-|---|---|---|---|
-| `reason.propose_slots` | समय चुनना बाकी है | *(was: समय भेजें — ग्राहक को बताना है)* | Propose a suitable time |
-| `reason.awaiting_customer` | कनेक्शन अभी स्लॉट कन्फर्म कर रहे हैं | *(was: ग्राहक चुन रहा है)* | Connection is choosing slot |
-| `reason.slot_confirmed` | समय चुन लिया गया है | *(was: समय पक्का हो गया)* | Time is confirmed |
-| `reason.scheduled` | कनेक्शन तैयार है · स्लॉट आने वाला है | *(was: तैयार — भेजने से पहले)* | Connection is ready · Upcoming slot |
-| `reason.scheduled_today` | आज का काम · तैयार रहें | *(was: आज का काम — तैयार)* | Today's work · Be ready |
-| `reason.reschedule` | कनेक्शन के लिए नया समय चुनें | *(was: फिर से समय भेजें)* | Propose new times for connection |
-| `reason.scheduling_failed` | कनेक्शन ने कन्फर्म नहीं किया | *(was: ग्राहक से पुष्टि हो रही है)* | Connection didn't confirm |
-| `reason.in_progress` | सेटअप चल रहा | *(was: इंस्टॉल चल रहा है)* | Install in progress |
+| Key | v1.5.1 Hindi | v1.5 Hindi (if changed) | v1.5.1 English | v1.5 English (if changed) |
+|---|---|---|---|---|
+| `reason.propose_slots` | समय चुनना बाकी है | *(was: समय भेजें — ग्राहक को बताना है)* | Propose a suitable time | — |
+| `reason.awaiting_customer` | कनेक्शन स्लॉट चुन रहे हैं | *(was: ग्राहक चुन रहा है)* | Connection is choosing a slot | *(was: Customer selecting)* |
+| `reason.slot_confirmed` | समय चुन लिया गया है | *(was: समय पक्का हो गया)* | Time is confirmed | — |
+| `reason.scheduled` | कनेक्शन तैयार है · स्लॉट आने वाला है | *(was: तैयार — भेजने से पहले)* | Connection is ready · Upcoming slot | *(was: Scheduled — pre slot day)* |
+| `reason.scheduled_today` | आज का काम · तैयार रहें | *(was: आज का काम — तैयार)* | Today's work · Be ready | *(was: Today's work — ready)* |
+| `reason.reschedule` | कनेक्शन के लिए नए समय चुनें | *(was: फिर से समय भेजें)* | Propose new times for connection | *(was: Repropose times)* |
+| `reason.scheduling_failed` | कनेक्शन ने कन्फर्म नहीं किया | *(was: ग्राहक से पुष्टि हो रही है)* | Connection didn't confirm | *(was: Confirming with customer)* |
+| `reason.in_progress` | सेटअप चल रहा है | *(was: इंस्टॉल चल रहा है)* | **Setup in progress** | *(was: Install in progress — register shift to Setup)* |
+
+**v1.5.1 rev 2 fixes:** `reason.awaiting_customer` hi changed from "कन्फर्म कर रहे हैं" (confirming) to "चुन रहे हैं" (choosing) to match state semantics + English. `reason.in_progress` hi added sentence-ending `है`. `reason.reschedule` hi pluralized "नए समय".
 
 ### 10.2 CTA keys (9)
 
-| Key | v1.5.1 Hindi | v1.5 Hindi (if changed) | English |
-|---|---|---|---|
-| `cta.propose_slots` | स्लॉट प्रस्तावित करें | *(was: समय भेजें)* | Propose times |
-| `cta.submit_slots` | समय भेजें | — | Submit times |
-| `cta.assign_executor` | टेक्निशियन चुनें | *(was: व्यक्ति चुनें)* | Choose technician |
-| `cta.assign` | चुनें | — | Assign |
-| `cta.dispatch` | शुरू करें | — | Start / Dispatch |
-| `cta.start_installation` **(NEW)** | सेटअप शुरू करें | *(key did not exist — was rendering `[cta.start_installation]` placeholder)* | Start setup |
-| `cta.call_customer` | कनेक्शन को कॉल करें | *(was: कॉल करें / ग्राहक को कॉल करें)* | Call customer |
-| `cta.confirm_exit` | पुष्टि करें | — | Confirm exit |
+| Key | v1.5.1 Hindi | v1.5 Hindi (if changed) | v1.5.1 English | v1.5 English (if changed) |
+|---|---|---|---|---|
+| `cta.propose_slots` | स्लॉट प्रस्तावित करें | *(was: समय भेजें)* | Propose times | — |
+| `cta.submit_slots` | समय भेजें | — | Submit times | — |
+| `cta.assign_executor` | टेक्निशियन चुनें | *(was: व्यक्ति चुनें)* | Choose technician | *(was: Assign person)* |
+| `cta.assign` | चुनें | — | Assign | — |
+| `cta.dispatch` | शुरू करें | — | **Start** | *(was: "Start / Dispatch" — slashed placeholder, cleaned up)* |
+| `cta.start_installation` **(NEW)** | सेटअप शुरू करें | *(key did not exist — was rendering `[cta.start_installation]` placeholder)* | Start setup | — |
+| `cta.call_customer` | कनेक्शन को कॉल करें | *(was: कॉल करें / ग्राहक को कॉल करें)* | **Call connection** | *(was: Call customer — vocab swap applied to English too)* |
+| `cta.confirm_exit` | पुष्टि करें | — | Confirm exit | — |
 
 ### 10.3 Exit keys (6) — UNCHANGED
 
@@ -921,20 +930,25 @@ v1.5.1 updates values for 15 keys from v1.5, adds 4 required keys (`drilldown.ex
 | `exit.CUSTOMER_CANCELLED` | ग्राहक ने रद्द किया | Customer cancelled *(legitimate `ग्राहक` — English label pair)* |
 | `exit.TECHNICIAN_UNAVAILABLE` | टेक्नीशियन उपलब्ध नहीं | Technician unavailable |
 
-### 10.4 Context keys (10)
+### 10.4 Context keys (9 — v1.5.1 rev 2 removes the dead `executor.title` from install bundle)
 
-| Key | v1.5.1 Hindi | v1.5 Hindi (if changed) | English |
-|---|---|---|---|
-| `slots.title` | दो समय भेजें | — | Propose two slots |
-| `slots.slot1` | पहला समय | — | First slot |
-| `slots.slot2` | दूसरा समय | — | Second slot |
-| `executor.title` | सेटअप कौन करेगा? | *(was: कौन करेगा इंस्टॉल?)* | Who will setup? |
-| `executor.install.title` **(NEW)** | सेटअप कौन करेगा? | *(new key — breaks cross-bundle collision with restore's executor.title = "कौन ठीक करेगा?")* | Who will setup? |
-| `executor.self` | मैं खुद करूँगा | — | I'll do it myself |
-| `executor.not_assigned` | अभी तय नहीं | — | Not assigned yet |
-| `contact.not_yet` | समय आने पर उपलब्ध | — | Available on slot day |
-| `contact.call_label` | कॉल करें | — | Call |
-| `scheduling_failed_system_handling` | कनेक्शन से पुष्टि हो रही है | *(was: ग्राहक से पुष्टि हो रही है)* | Confirming with customer |
+| Key | v1.5.1 Hindi | v1.5 Hindi (if changed) | v1.5.1 English | v1.5 English (if changed) |
+|---|---|---|---|---|
+| `slots.title` | दो समय भेजें | — | Propose two slots | — |
+| `slots.slot1` | पहला समय | — | First slot | — |
+| `slots.slot2` | दूसरा समय | — | Second slot | — |
+| `executor.title` | — **DELETED** from install bundle | *(was: कौन करेगा इंस्टॉल?)* | — **DELETED** | *(was: Who will install?)* |
+| `executor.install.title` **(NEW)** | सेटअप कौन करेगा? | *(new key — breaks cross-bundle collision with restore's `executor.title = "कौन ठीक करेगा?" / "Who will fix?"` which was silently winning the flat-merge)* | **Who will work on this setup?** | *(rev 2: grammar fix from "Who will setup?")* |
+| `executor.self` | मैं खुद करूँगा | — | I'll do it myself | — |
+| `executor.not_assigned` | अभी तय नहीं | — | Not assigned yet | — |
+| `contact.not_yet` | समय आने पर उपलब्ध | — | Available on slot day | — |
+| `contact.call_label` | कॉल करें | — | Call | — |
+| `scheduling_failed_system_handling` | कनेक्शन से पुष्टि हो रही है | *(was: ग्राहक से पुष्टि हो रही है)* | **Confirming with connection** | *(was: Confirming with customer — vocab swap propagated to English)* |
+
+**v1.5.1 rev 2 fixes:**
+- **Deleted** install's own `executor.title` key entirely. Previously it was a dead duplicate shadowed by restore's `executor.title = "Who will fix?"` at runtime via `WiomLabels` flat-merge collision. Install callers must only use `executor.install.title`.
+- **`executor.install.title` en** changed from broken `"Who will setup?"` ("setup" is a noun, not a verb) to natural `"Who will work on this setup?"` (Abhishek directive).
+- **`scheduling_failed_system_handling` en** now says "connection" to match the Hindi side of the ग्राहक→कनेक्शन vocab swap.
 
 ### 10.5 Source + section keys (6) — UNCHANGED
 
@@ -960,11 +974,11 @@ v1.5.1 updates values for 15 keys from v1.5, adds 4 required keys (`drilldown.ex
 
 | Key | v1.5.1 Hindi | v1.5 Hindi (if changed) | English |
 |---|---|---|---|
-| `notif.new_assignment` | नया सेटअप मिला | *(was: नया इंस्टॉल — समय भेजें)* | New install — propose |
+| `notif.new_assignment` | नया सेटअप मिला | *(was: नया इंस्टॉल — समय भेजें)* | New setup assigned *(rev 2: was "New install — propose")* |
 | `notif.act_soon` | जल्दी समय भेजें — काम जा सकता है | — | Respond soon |
-| `notif.slot_confirmed` | कनेक्शन ने समय चुना — टेक्निशियन चुनें | *(was: ग्राहक ने समय चुना — व्यक्ति चुनें)* | Customer picked — assign |
+| `notif.slot_confirmed` | कनेक्शन ने समय चुना — टेक्निशियन चुनें | *(was: ग्राहक ने समय चुना — व्यक्ति चुनें)* | **Connection picked — assign technician** *(rev 2: was "Customer picked — assign")* |
 | `notif.reschedule_needed` | फिर से समय भेजें | — | Repropose |
-| `notif.install_deadline` | सेटअप का समय पास | *(was: समय सीमा करीब)* | Deadline approaching |
+| `notif.install_deadline` | सेटअप का समय पास | *(was: समय सीमा करीब)* | Setup deadline approaching *(rev 2: was "Deadline approaching")* |
 
 ### 10.8 Section label keys (4)
 
@@ -975,45 +989,50 @@ v1.5.1 updates values for 15 keys from v1.5, adds 4 required keys (`drilldown.ex
 | `drilldown.executor_section` | टेक्निशियन चुनें (action form) | *(was: व्यक्ति — single static label)* | Choose technician |
 | `drilldown.executor_section.assigned` **(NEW)** | टेक्निशियन | *(new — informational form once executor assigned)* | Technician |
 
-### 10.9 Banner keys (31 NEW — proposed for migration)
+### 10.9 Banner keys (31 — MIGRATED to JSON in v1.5.1 rev 2)
 
-Currently inlined as Unicode escapes in `InstallStateBanner.kt`. Proposed migration to JSON:
+Live in `install_labels_v1.4_hi_en.json`. `InstallStateBanner.kt` reads them via `WiomLabels.get()` / `WiomLabels.format()` with `{name}` template substitution for executor-aware variants. **Zero hardcoded strings in the banner source.** Swap between hi and en via the debug panel Language toggle.
 
-| Proposed key | hi value |
-|---|---|
-| `banner.awaiting_slot_proposal.title` | समय चुनना बाकी है |
-| `banner.awaiting_slot_proposal.subtitle` | कनेक्शन से दो स्लॉट पूछने हैं |
-| `banner.awaiting_customer.title` | कनेक्शन चुन रहा है |
-| `banner.awaiting_customer.subtitle` | दो स्लॉट भेजे हैं · जवाब का इंतज़ार |
-| `banner.slot_confirmed.title` | स्लॉट पक्का हुआ |
-| `banner.slot_confirmed.subtitle` | अब टेक्निशियन चुनना है |
-| `banner.scheduled.title` | सेटअप पक्का हुआ |
-| `banner.scheduled_today.title` | आज सेटअप का दिन है |
-| `banner.scheduled_today.subtitle` | किसी भी वक्त शुरू कर सकते हो |
-| `banner.reschedule.title` | कनेक्शन के लिए नया समय चुनें |
-| `banner.reschedule.subtitle` | दोबारा स्लॉट प्रस्ताव भेजो |
-| `banner.scheduling_failed.title` | कनेक्शन ने स्लॉट कन्फर्म नहीं किया |
-| `banner.scheduling_failed.subtitle` | पुराने स्लॉट कैंसल हुए · CSP कोई काम नहीं |
-| `banner.in_progress.title` | सेटअप पर काम चल रहा है |
-| `banner.in_progress.subtitle_template` | `{executorName} काम कर रहे हैं` |
-| `banner.in_progress.subtitle_fallback` | काम चालू है |
-| `banner.install_submitted.title` | सेटअप सबमिट हुआ |
-| `banner.install_submitted.subtitle` | वेरिफाई के लिए तैयार |
-| `banner.delegated_not_started.title_template` | `{executorName} ने सेटअप अभी शुरू नहीं किया` |
-| `banner.delegated_not_started.title_fallback` | सेटअप अभी शुरू नहीं हुआ |
-| `banner.delegated_not_started.subtitle` | जो व्यक्ति चुना है उसका इंतज़ार |
-| `banner.delegated_in_progress.title_template` | `{executorName} काम कर रहे हैं` |
-| `banner.delegated_in_progress.title_fallback` | काम चालू है |
-| `banner.delegated_in_progress.subtitle` | सेटअप पर काम चल रहा है |
-| `banner.delegated_overdue.title_template` | `{executorName} ने कनेक्शन सेटअप में देरी कर दी` |
-| `banner.delegated_overdue.title_fallback` | टेक्निशियन ने कनेक्शन सेटअप में देरी कर दी |
-| `banner.delegated_overdue.subtitle` | सेटअप को जल्दी पूरा करवाएं |
-| `banner.verification_pending.title` | सेटअप वेरिफाई हो रहा है |
-| `banner.verification_pending.subtitle` | व्योम जाँच रहा है |
-| `banner.resolved.title` | सेटअप पूरा हुआ |
-| `banner.resolved.subtitle` | कनेक्शन का नेट चालू है |
+| Key | Hindi | English |
+|---|---|---|
+| `banner.awaiting_slot_proposal.title` | समय चुनना बाकी है | Time to be proposed |
+| `banner.awaiting_slot_proposal.subtitle` | कनेक्शन से दो स्लॉट पूछने हैं | Ask connection for two time slots |
+| `banner.awaiting_customer.title` | कनेक्शन चुन रहा है | Connection is choosing |
+| `banner.awaiting_customer.subtitle` | दो स्लॉट भेजे हैं · जवाब का इंतज़ार | Two slots sent · Awaiting reply |
+| `banner.slot_confirmed.title` | स्लॉट पक्का हुआ | Slot confirmed |
+| `banner.slot_confirmed.subtitle` | अब टेक्निशियन चुनना है | Now choose a technician |
+| `banner.scheduled.title` | सेटअप पक्का हुआ | Setup confirmed |
+| `banner.scheduled_today.title` | आज सेटअप का दिन है | Today is setup day |
+| `banner.scheduled_today.subtitle` | किसी भी वक्त शुरू कर सकते हो | You can start any time |
+| `banner.reschedule.title` | कनेक्शन के लिए नया समय चुनें | Propose new times for connection |
+| `banner.reschedule.subtitle` | दोबारा स्लॉट प्रस्ताव भेजो | Send slot proposal again |
+| `banner.scheduling_failed.title` | कनेक्शन ने स्लॉट कन्फर्म नहीं किया | Connection didn't confirm slots |
+| `banner.scheduling_failed.subtitle` | पुराने स्लॉट कैंसल हुए · CSP कोई काम नहीं | Old slots cancelled · No CSP action |
+| `banner.in_progress.title` | सेटअप पर काम चल रहा है | Setup in progress |
+| `banner.in_progress.subtitle_template` | `{name} काम कर रहे हैं` | `{name} is working on it` |
+| `banner.in_progress.subtitle_fallback` | काम चालू है | Work in progress |
+| `banner.install_submitted.title` | सेटअप सबमिट हुआ | Setup submitted |
+| `banner.install_submitted.subtitle` | वेरिफाई के लिए तैयार | Ready for verification |
+| `banner.delegated_not_started.title_template` | `{name} ने सेटअप अभी शुरू नहीं किया` | `{name} hasn't started the setup yet` |
+| `banner.delegated_not_started.title_fallback` | सेटअप अभी शुरू नहीं हुआ | Setup not started yet |
+| `banner.delegated_not_started.subtitle` | जो व्यक्ति चुना है उसका इंतज़ार | Waiting for the assigned person |
+| `banner.delegated_in_progress.title_template` | `{name} काम कर रहे हैं` | `{name} is working on it` |
+| `banner.delegated_in_progress.title_fallback` | काम चालू है | Work in progress |
+| `banner.delegated_in_progress.subtitle` | सेटअप पर काम चल रहा है | Setup is in progress |
+| `banner.delegated_overdue.title_template` | `{name} ने कनेक्शन सेटअप में देरी कर दी` | `{name} delayed the connection setup` |
+| `banner.delegated_overdue.title_fallback` | टेक्निशियन ने कनेक्शन सेटअप में देरी कर दी | Technician delayed the connection setup |
+| `banner.delegated_overdue.subtitle` | सेटअप को जल्दी पूरा करवाएं | Get the setup completed quickly |
+| `banner.verification_pending.title` | सेटअप वेरिफाई हो रहा है | Setup is being verified |
+| `banner.verification_pending.subtitle` | व्योम जाँच रहा है | **Wiom is checking** |
+| `banner.resolved.title` | सेटअप पूरा हुआ | Setup complete |
+| `banner.resolved.subtitle` | कनेक्शन का नेट चालू है | Connection's net is live |
 
-**Key count: 49 baseline (v1.5) + 4 required new (`drilldown.executor_section.assigned`, `cta.start_installation`, `executor.install.title`, `INSTALL_SUBMITTED` reason if migrated) = 53 required. +31 optional banner keys = 84 if banner migration lands in same PR.**
+**Rev 2 notes:**
+- Template substitution uses `{name}` (not `{executorName}`) to match `WiomLabels.format(key, mapOf("name" to executorName))`
+- `banner.verification_pending.subtitle` English says **"Wiom is checking"** (brand spelling), not "Vyom" or "System". Hindi retains `व्योम` as the Devanagari phonetic.
+- All English values are **contextual translations**, not literal word-for-word. Example: `जो व्यक्ति चुना है उसका इंतज़ार` → "Waiting for the assigned person" (not "assigned-person wait").
+
+**Key count: 49 baseline (v1.5) + 3 required new (`drilldown.executor_section.assigned`, `cta.start_installation`, `executor.install.title`) − 1 deleted (`executor.title` from install bundle) + 31 banner = 82 total in install bundle.**
 
 ---
 
