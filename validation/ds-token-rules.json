@@ -1,0 +1,122 @@
+{
+  "_meta": {
+    "description": "DS token binding rules. For each file or glob, declare forbidden patterns (raw literals) and required token imports. The validator scans line-by-line and reports any raw Color(0x...), raw .dp (in non-DS files), wrong FontWeight, or emoji-in-button violations.",
+    "version": "1.0"
+  },
+
+  "file_rules": {
+    "feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/InstallStateBanner.kt": {
+      "forbidden_patterns": [
+        {
+          "regex": "Color\\(0x[0-9A-Fa-f]+\\)",
+          "message": "Raw Color literal — must use WiomColors.*",
+          "severity": "error"
+        },
+        {
+          "regex": "FontWeight\\.Bold",
+          "message": "Button-adjacent typography uses SemiBold in redesign — not Bold",
+          "severity": "warn"
+        }
+      ],
+      "required_imports": [
+        "com.wiom.csp.core.common.theme.WiomColors",
+        "com.wiom.csp.core.common.theme.WiomRadius",
+        "com.wiom.csp.core.common.theme.WiomSpacing",
+        "com.wiom.csp.core.common.theme.WiomTextStyle"
+      ]
+    },
+
+    "feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/InstallDrilldownContent.kt": {
+      "forbidden_patterns": [
+        {
+          "regex": "Color\\(0x[0-9A-Fa-f]+\\)",
+          "message": "Raw Color literal — must use WiomColors.*",
+          "severity": "error"
+        }
+      ],
+      "required_imports": [
+        "com.wiom.csp.core.common.theme.WiomColors",
+        "com.wiom.csp.core.common.theme.WiomSpacing"
+      ]
+    },
+
+    "feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/SlotProposalSheet.kt": {
+      "forbidden_patterns": [
+        {
+          "regex": "Color\\(0x[0-9A-Fa-f]+\\)",
+          "message": "Raw Color literal — must use WiomColors.*",
+          "severity": "error"
+        }
+      ]
+    },
+
+    "feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/ExecutorAssignmentSheet.kt": {
+      "forbidden_patterns": [
+        {
+          "regex": "Color\\(0x[0-9A-Fa-f]+\\)",
+          "message": "Raw Color literal — must use WiomColors.*",
+          "severity": "error"
+        },
+        {
+          "regex": "\\(स्वयं\\)",
+          "message": "Drop '(स्वयं)' suffix from executor radio list — per user direction",
+          "severity": "error"
+        }
+      ]
+    },
+
+    "feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/ExitReasonSheet.kt": {
+      "forbidden_patterns": [
+        {
+          "regex": "Color\\(0x[0-9A-Fa-f]+\\)",
+          "message": "Raw Color literal — must use WiomColors.*",
+          "severity": "error"
+        }
+      ]
+    },
+
+    "core/common/src/main/java/com/wiom/csp/core/common/composables/WiomButton.kt": {
+      "forbidden_patterns": [
+        {
+          "regex": "FontWeight\\.Bold",
+          "message": "WiomButton uses SemiBold, not Bold",
+          "severity": "error"
+        }
+      ],
+      "required_symbols": [
+        "enum class WiomButtonType",
+        "Primary",
+        "Secondary",
+        "Tertiary",
+        "Destructive",
+        "leadingIcon",
+        "trailingIcon"
+      ]
+    },
+
+    "core/common/src/main/java/com/wiom/csp/core/common/theme/WiomDsMode.kt": {
+      "required_symbols": [
+        "object WiomDsMode",
+        "var isRedesign"
+      ]
+    },
+
+    "core/common/src/main/java/com/wiom/csp/core/common/theme/WiomTokens.kt": {
+      "required_patterns": [
+        {
+          "regex": "WiomDsMode\\.isRedesign",
+          "message": "Redesign token fork must gate on WiomDsMode.isRedesign",
+          "severity": "error",
+          "min_occurrences": 4
+        }
+      ]
+    }
+  },
+
+  "global_button_emoji_ban": {
+    "scope": ["feature/home/**/*.kt", "core/common/**/WiomButton.kt"],
+    "regex": "WiomButton\\([^)]*text\\s*=\\s*\"[^\"]*[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{27BF}]",
+    "message": "Emojis not allowed in functional button text — use Material Icons",
+    "severity": "error"
+  }
+}

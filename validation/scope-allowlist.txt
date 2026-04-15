@@ -1,0 +1,63 @@
+# Pratibimb PR — scope allowlist
+# The feature branch targeting wiom-tech/wiom-csp-app-apr09@release-01 may ONLY
+# modify files listed here. Any file outside this list is an out-of-scope change
+# and fails Layer 4 of the validator.
+#
+# Glob syntax: `dir/**` means any file under dir (recursive); `dir/*` means
+# direct children only; exact paths match literally.
+
+# ── Build + flavor setup ──
+app/build.gradle.kts
+app/src/main/java/com/wiom/csp/WiomCspApplication.kt
+app/src/redesign/**
+app/src/staging/res/**
+
+# ── DS tokens + new components ──
+core/common/src/main/java/com/wiom/csp/core/common/theme/WiomTokens.kt
+core/common/src/main/java/com/wiom/csp/core/common/theme/WiomDsMode.kt
+core/common/src/main/java/com/wiom/csp/core/common/composables/WiomButton.kt
+core/common/src/main/java/com/wiom/csp/core/common/composables/WiomBadge.kt
+core/common/src/main/java/com/wiom/csp/core/common/composables/WiomHeader.kt
+
+# ── Navigation ──
+app/src/main/java/com/wiom/csp/navigation/AppNavGraph.kt
+
+# ── Mock data + debug ──
+core/data/build.gradle.kts
+core/data/src/main/java/com/wiom/csp/core/data/repository/DebugConfigs.kt
+core/data/src/main/java/com/wiom/csp/core/data/repository/MockTaskRepository.kt
+core/model/src/main/java/com/wiom/csp/core/model/AssuranceChipData.kt
+
+# ── Home feature — feed + drilldown routing ──
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/HomeScreen.kt
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/TaskDrilldownScreen.kt
+feature/home/src/main/java/com/wiom/csp/feature/home/viewmodel/HomeViewModel.kt
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/feed/TaskCard.kt
+
+# ── Home feature — install drilldown (the main redesign surface) ──
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/InstallStateBanner.kt
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/InstallDrilldownContent.kt
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/ExecutorAssignmentSheet.kt
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/ExitReasonSheet.kt
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/SlotProposalSheet.kt
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/SlotStatusBadge.kt
+
+# ── Home feature — restore drilldown sheets (shared component fixes) ──
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/restore/DiagnoseFaultSheet.kt
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/restore/RestoreExecutorSheet.kt
+
+# ── Home feature — assurance strip + quality/exposure drilldowns (shared DS) ──
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/strip/AssuranceChip.kt
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/strip/drilldowns/ExposureDrilldown.kt
+feature/home/src/main/java/com/wiom/csp/feature/home/ui/strip/drilldowns/QualityDrilldown.kt
+
+# ── Wallet home (shared DS touches) ──
+feature/wallet/src/main/java/com/wiom/csp/feature/wallet/ui/WalletHomeScreen.kt
+
+# ── Label bundles (copy changes only) ──
+app/src/main/assets/install_labels_v1.4_hi_en.json
+app/src/main/assets/restore_labels_v1.0_hi_en.json
+app/src/main/assets/netbox_labels_v1.2_hi_en.json
+app/src/main/assets/wallet_labels_v1.2_hi_en.json
+app/src/main/assets/home_labels_hi_en.json
+app/src/main/assets/assurance_strip_labels_v1.0_hi_en.json

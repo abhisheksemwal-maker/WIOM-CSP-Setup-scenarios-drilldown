@@ -1,0 +1,56 @@
+{
+  "_meta": {
+    "description": "Known cross-bundle label-key collisions and their expected resolutions. The validator reads every *_hi_en.json bundle in app/src/main/assets/, builds a flat key → [bundle, value] map, and asserts that any collision is listed here with a matching expected resolution. Unlisted collisions fail validation.",
+    "version": "1.0"
+  },
+
+  "resolved": [
+    {
+      "key": "drilldown.location_section",
+      "bundles": ["install_labels_v1.4_hi_en.json", "restore_labels_v1.0_hi_en.json"],
+      "expected_hi": "जगह",
+      "expected_en": "Place",
+      "resolution": "Both aligned — was स्थान in restore, caused silent override"
+    },
+    {
+      "key": "drilldown.executor_section",
+      "bundles": ["install_labels_v1.4_hi_en.json", "restore_labels_v1.0_hi_en.json"],
+      "expected_hi": "टेक्निशियन चुनें",
+      "expected_en": "Choose technician",
+      "resolution": "Both aligned"
+    },
+    {
+      "key": "cta.call_customer",
+      "bundles": ["install_labels_v1.4_hi_en.json", "restore_labels_v1.0_hi_en.json"],
+      "expected_hi": "कनेक्शन को कॉल करें",
+      "expected_en": "Call customer",
+      "resolution": "Both aligned — ग्राहक → कनेक्शन vocab swap applied globally"
+    }
+  ],
+
+  "renamed": [
+    {
+      "old_key": "executor.title (install side)",
+      "new_key": "executor.install.title",
+      "bundles": ["install_labels_v1.4_hi_en.json"],
+      "reason": "Install needs the question 'सेटअप कौन करेगा?'; restore needs 'कौन ठीक करेगा?'. Same key, opposite verbs — renamed install side to break the collision. Restore keeps executor.title."
+    }
+  ],
+
+  "unresolved": [
+    {
+      "key": "reason.verifying",
+      "bundles": ["install_labels_v1.4_hi_en.json", "restore_labels_v1.0_hi_en.json"],
+      "install_semantic": "customer-side check — 'ग्राहक की पुष्टि बाकी' (CSP waiting on customer)",
+      "restore_semantic": "system-side check — 'जाँच हो रही है' (Vyom checking)",
+      "risk": "high",
+      "proposed_fix": "Split into install.reason.verifying and restore.reason.verifying, update all readers",
+      "severity": "warn"
+    }
+  ],
+
+  "at_risk_shared": {
+    "_description": "Generic keys that are fine today but could collide if any module adds them. Migrate to common_labels_*.json explicitly.",
+    "keys": ["cta.confirm", "cta.submit", "cta.cancel", "status.pending", "error.retry", "common.ok", "common.back"]
+  }
+}

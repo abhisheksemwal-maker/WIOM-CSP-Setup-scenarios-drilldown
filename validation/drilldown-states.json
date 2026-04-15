@@ -1,0 +1,338 @@
+{
+  "_meta": {
+    "description": "Per-state structural spec for the 13 install lifecycle drilldown states. The validator asserts that InstallStateBanner.kt has a when-branch for each state_enum, that the title and subtitle strings appear in the source (either as literal or Unicode escape), and that section visibility + CTA routing match the declared values.",
+    "source_file": "feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/InstallStateBanner.kt",
+    "version": "1.0",
+    "last_updated": "2026-04-15"
+  },
+
+  "INS-1041": {
+    "state_enum": "AWAITING_SLOT_PROPOSAL",
+    "banner": {
+      "icon": "Schedule",
+      "title_hi": "समय चुनना बाकी है",
+      "subtitle_hi": "ग्राहक से दो स्लॉट पूछने हैं",
+      "accent_token": "stateWarning",
+      "bg_token": "bgUrgent"
+    },
+    "sections": {
+      "executor": "hidden",
+      "slots": "hidden",
+      "location": "shown",
+      "customer_contact": "shown",
+      "timeline": "hidden"
+    },
+    "primary_cta": {
+      "text_hi": "स्लॉट प्रस्तावित करें",
+      "type": "Primary",
+      "opens": "SlotProposalSheet"
+    },
+    "tertiary_cta_inline": {
+      "text_hi": "नहीं कर पाएँगे",
+      "type": "Tertiary",
+      "opens": "ExitReasonSheet",
+      "reason": "Fastest escape on empty state — only state with inline exit"
+    },
+    "overflow_menu": [],
+    "rationale": "Action cue — tell CSP what to do, don't describe their passive waiting state"
+  },
+
+  "INS-1042": {
+    "state_enum": "AWAITING_CUSTOMER_SELECTION",
+    "banner": {
+      "icon": "HourglassBottom",
+      "title_hi": "ग्राहक चुन रहा है",
+      "subtitle_hi": "दो स्लॉट भेजे हैं · जवाब का इंतज़ार",
+      "accent_token": "stateInfo",
+      "bg_token": "bgInfo"
+    },
+    "sections": {
+      "executor": "hidden",
+      "slots": "shown_as_pending_grey",
+      "location": "shown",
+      "customer_contact": "shown"
+    },
+    "primary_cta": null,
+    "overflow_menu": [
+      { "text_hi": "नहीं कर पाएँगे", "type": "Tertiary", "opens": "ExitReasonSheet" }
+    ],
+    "rationale": "State blocked on customer — no primary CTA that does nothing. Slot chip pending shown as grey text, not purple chip."
+  },
+
+  "INS-1043": {
+    "state_enum": "SLOT_CONFIRMED",
+    "banner": {
+      "icon": "Check",
+      "title_hi": "स्लॉट पक्का हुआ",
+      "subtitle_hi": "अब टेक्निशियन चुनना है",
+      "accent_token": "statePositive",
+      "bg_token": "bgPositive"
+    },
+    "sections": {
+      "executor": "action_header",
+      "executor_header_hi": "टेक्निशियन चुनें",
+      "slots": "confirmed_only_filter",
+      "location": "shown",
+      "customer_contact": "shown"
+    },
+    "primary_cta": {
+      "text_hi": "टेक्निशियन चुनें",
+      "type": "Primary",
+      "opens": "ExecutorAssignmentSheet",
+      "sheet_title_hi": "सेटअप कौन करेगा?"
+    },
+    "overflow_menu": [
+      { "text_hi": "नहीं कर पाएँगे", "type": "Tertiary", "opens": "ExitReasonSheet" }
+    ],
+    "rationale": "Slot filter: show only confirmed, hide proposed/cancelled siblings"
+  },
+
+  "INS-1044": {
+    "state_enum": "IN_PROGRESS",
+    "banner": {
+      "icon": "Sync",
+      "title_hi": "सेटअप पर काम चल रहा है",
+      "subtitle_hi_template": "{executorName} काम कर रहे हैं",
+      "subtitle_hi_fallback": "काम चालू है",
+      "accent_token": "stateInfo",
+      "bg_token": "bgInfo"
+    },
+    "sections": {
+      "executor": "informational_header",
+      "slots": "confirmed_only_filter",
+      "timeline": "shown_with_today_cue"
+    },
+    "primary_cta": {
+      "text_hi": "कनेक्शन को कॉल करें",
+      "type": "Tertiary",
+      "trailing_icon": "Call",
+      "action": "dial_customer"
+    },
+    "overflow_menu": [
+      { "text_hi": "नहीं कर पाएँगे", "type": "Tertiary", "opens": "ExitReasonSheet" }
+    ],
+    "rationale": "Respectful plural काम कर रहे हैं for executor. CTA is link-style + icon, not solid Primary."
+  },
+
+  "INS-1045": {
+    "state_enum": "DELEGATED_OVERDUE",
+    "banner": {
+      "icon": "Warning",
+      "title_hi_template": "{executorName} ने कनेक्शन सेटअप में देरी कर दी",
+      "title_hi_fallback": "टेक्निशियन ने कनेक्शन सेटअप में देरी कर दी",
+      "subtitle_hi": "सेटअप को जल्दी पूरा करवाएं",
+      "accent_token": "stateNegative",
+      "bg_token": "bgNegative",
+      "max_lines_title": 2
+    },
+    "sections": {
+      "executor": "informational_header_with_inline_call",
+      "call_icon_position": "right_edge_aligned_with_chip_above",
+      "slots": "confirmed_only_filter"
+    },
+    "primary_cta": {
+      "text_hi": "टेक्निशियन बदलें",
+      "type": "Secondary",
+      "opens": "ExecutorAssignmentSheet",
+      "routing_note": "Routing bug fix — TaskDrilldownScreen must include DELEGATED_OVERDUE in the when-branch that opens executor sheet"
+    },
+    "overflow_menu": [
+      { "text_hi": "नहीं कर पाएँगे", "type": "Tertiary", "opens": "ExitReasonSheet" }
+    ],
+    "rationale": "Event-style title (named actor + past action), not status-style"
+  },
+
+  "INS-1046": {
+    "state_enum": "RESOLVED",
+    "banner": {
+      "icon": "Check",
+      "title_hi": "सेटअप पूरा हुआ",
+      "subtitle_hi": "कनेक्शन का नेट चालू है",
+      "accent_token": "statePositive",
+      "bg_token": "bgPositive"
+    },
+    "sections": {
+      "executor": "informational_header",
+      "slots": "confirmed_only_filter",
+      "timeline": "shown_with_completion_event"
+    },
+    "primary_cta": null,
+    "overflow_menu": [],
+    "rationale": "ग्राहक → कनेक्शन vocab swap"
+  },
+
+  "INS-1047": {
+    "state_enum": "SCHEDULED",
+    "variant_flag": "isSlotDay=true",
+    "banner": {
+      "icon": "Schedule",
+      "title_hi": "आज सेटअप का दिन है",
+      "subtitle_hi": "किसी भी वक्त शुरू कर सकते हो",
+      "accent_token": "stateWarning",
+      "bg_token": "bgUrgent"
+    },
+    "sections": {
+      "executor": "informational_header",
+      "slots": "confirmed_only_filter"
+    },
+    "primary_cta": {
+      "text_hi": "सेटअप शुरू करें",
+      "label_key": "cta.start_installation",
+      "type": "Primary",
+      "action": "start_install_flow"
+    },
+    "overflow_menu": [
+      { "text_hi": "नहीं कर पाएँगे", "type": "Tertiary", "opens": "ExitReasonSheet" }
+    ],
+    "rationale": "Oblique case किसी भी वक्त, not कोई भी वक्त. Label cta.start_installation was missing; added."
+  },
+
+  "INS-1047b": {
+    "_note": "Not seeded — same enum value as INS-1047 but isSlotDay=false",
+    "state_enum": "SCHEDULED",
+    "variant_flag": "isSlotDay=false",
+    "banner": {
+      "icon": "Schedule",
+      "title_hi": "सेटअप पक्का हुआ",
+      "subtitle_hi_template": "{task.deadlineDisplay}",
+      "accent_token": "statePositive",
+      "bg_token": "bgPositive"
+    },
+    "gap": "Enum value exists, banner branch exists, but no mock card seeded"
+  },
+
+  "INS-1048": {
+    "state_enum": "NEEDS_RESCHEDULING",
+    "banner": {
+      "icon": "Warning",
+      "title_hi": "कनेक्शन के लिए नया समय चुनें",
+      "subtitle_hi": "दोबारा स्लॉट प्रस्ताव भेजो",
+      "accent_token": "stateWarning",
+      "bg_token": "bgUrgent"
+    },
+    "sections": {
+      "executor": "hidden",
+      "slots": "shown_new_after_resubmit",
+      "reason_subtext": "removed_because_duplicated"
+    },
+    "primary_cta": {
+      "text_hi": "स्लॉट प्रस्तावित करें",
+      "type": "Primary",
+      "opens": "SlotProposalSheet"
+    },
+    "overflow_menu": [
+      { "text_hi": "नहीं कर पाएँगे", "type": "Tertiary", "opens": "ExitReasonSheet" }
+    ],
+    "rationale": "Event framing (pick new time) not shame framing (you missed). Slot callback chain must thread slot data through all 4 files."
+  },
+
+  "INS-1049": {
+    "state_enum": "SCHEDULING_FAILED",
+    "feed_visibility": "hidden_by_feed_filter",
+    "banner": {
+      "icon": "Sync",
+      "title_hi": "कनेक्शन ने स्लॉट confirm नहीं किया",
+      "subtitle_hi": "पुराने स्लॉट cancel हुए · CSP कोई काम नहीं",
+      "accent_token": "stateInfo",
+      "bg_token": "bgInfo"
+    },
+    "primary_cta": null,
+    "overflow_menu": [],
+    "rationale": "Hidden from CSP feed via `tasks.filter { it.currentState != \"SCHEDULING_FAILED\" }`. State exists, renders correctly if deep-linked."
+  },
+
+  "INS-1050": {
+    "state_enum": "INSTALL_SUBMITTED",
+    "banner": {
+      "icon": "HourglassBottom",
+      "title_hi": "सेटअप सबमिट हुआ",
+      "subtitle_hi": "वेरिफाई के लिए तैयार",
+      "accent_token": "stateInfo",
+      "bg_token": "bgInfo"
+    },
+    "deadline_display_hi": "सबमिट हो चुका है",
+    "primary_cta": null,
+    "overflow_menu": [],
+    "rationale": "Option C — queued for verify (passive wait). Distinct from INS-1053 which is actively verifying. Devanagari सबमिट not Latin submit."
+  },
+
+  "INS-1051": {
+    "state_enum": "DELEGATED_NOT_STARTED",
+    "banner": {
+      "icon": "HourglassBottom",
+      "title_hi_template": "{executorName} ने सेटअप अभी शुरू नहीं किया",
+      "title_hi_fallback": "सेटअप अभी शुरू नहीं हुआ",
+      "subtitle_hi": "जो व्यक्ति चुना है उसका इंतज़ार",
+      "accent_token": "stateInfo",
+      "bg_token": "bgInfo"
+    },
+    "sections": {
+      "executor": "informational_header",
+      "slots": "confirmed_only_filter"
+    },
+    "primary_cta": {
+      "text_hi": "कनेक्शन को कॉल करें",
+      "type": "Tertiary",
+      "trailing_icon": "Call"
+    },
+    "overflow_menu": [
+      { "text_hi": "नहीं कर पाएँगे", "type": "Tertiary", "opens": "ExitReasonSheet" }
+    ],
+    "loose_end": "User flagged 'rajesh has a space' — unreproduced"
+  },
+
+  "INS-1052": {
+    "state_enum": "DELEGATED_IN_PROGRESS",
+    "banner": {
+      "icon": "Sync",
+      "title_hi_template": "{executorName} काम कर रहे हैं",
+      "title_hi_fallback": "काम चालू है",
+      "subtitle_hi": "सेटअप पर काम चल रहा है",
+      "accent_token": "stateInfo",
+      "bg_token": "bgInfo"
+    },
+    "sections": {
+      "executor": "informational_header",
+      "slots": "confirmed_only_filter"
+    },
+    "primary_cta": {
+      "text_hi": "कनेक्शन को कॉल करें",
+      "type": "Tertiary",
+      "trailing_icon": "Call"
+    },
+    "overflow_menu": [
+      { "text_hi": "नहीं कर पाएँगे", "type": "Tertiary", "opens": "ExitReasonSheet" }
+    ],
+    "rationale": "Respectful plural काम कर रहे हैं for named executor"
+  },
+
+  "INS-1053": {
+    "state_enum": "VERIFICATION_PENDING",
+    "banner": {
+      "icon": "Sync",
+      "title_hi": "सेटअप वेरिफाई हो रहा है",
+      "subtitle_hi": "व्योम जाँच रहा है",
+      "accent_token": "stateInfo",
+      "bg_token": "bgInfo"
+    },
+    "deadline_display_hi": "वेरिफिकेशन चल रहा है",
+    "timeline_event_hi": "वेरिफाई शुरू हुआ",
+    "primary_cta": null,
+    "overflow_menu": [],
+    "rationale": "Option C — actively verifying (distinct from INS-1050 queued). Short ि matra वेरिफाई not long ी वेरीफाई."
+  },
+
+  "_gap_states": {
+    "_note": "States declared in the Wiom CSP framework spec but NOT in the current InstallState enum. Next-session target.",
+    "ASSIGNED": {
+      "spec_source": "01-module-context.md:178 (P41 Assignment Response)",
+      "meaning": "Task routed to CSP but not yet accepted/declined",
+      "position": "before AWAITING_SLOT_PROPOSAL"
+    },
+    "RECONFIRMATION_PENDING": {
+      "spec_source": "01-module-context.md:179 (P74 Install Work)",
+      "meaning": "Passive wait — customer re-confirming slot closer to install date",
+      "position": "after SCHEDULED"
+    }
+  }
+}

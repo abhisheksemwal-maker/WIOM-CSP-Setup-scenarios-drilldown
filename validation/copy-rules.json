@@ -1,0 +1,87 @@
+{
+  "_meta": {
+    "description": "Pattern-based copy lint rules. Applied across install label bundle + all install-touching Kotlin files. Each rule has an id, a regex, a message, a severity (error/warn), and optional scope (glob patterns — if empty, applies globally to scan paths).",
+    "version": "1.0"
+  },
+
+  "scan_paths": [
+    "app/src/main/assets/install_labels_v1.4_hi_en.json",
+    "app/src/main/assets/restore_labels_v1.0_hi_en.json",
+    "app/src/main/assets/netbox_labels_v1.2_hi_en.json",
+    "feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install",
+    "core/data/src/main/java/com/wiom/csp/core/data/repository/MockTaskRepository.kt"
+  ],
+
+  "forbidden_patterns": [
+    {
+      "id": "latin-word-mid-devanagari",
+      "regex": "[\\u0900-\\u097F]\\s+(submit|verify|verification|confirm|cancel|status|submitted|verified|confirmed|cancelled)\\s+[\\u0900-\\u097F]",
+      "regex_flags": "i",
+      "message": "Latin English word embedded in Devanagari string — use Devanagari transliteration (सबमिट, वेरिफाई, कन्फर्म, कैंसल, स्टेटस)",
+      "severity": "error"
+    },
+    {
+      "id": "long-i-matra-verify",
+      "regex": "वेरी(फाई|फिकेशन)",
+      "message": "Long ी matra in 'verify' creates visible gap — use short ि (वेरिफाई, वेरिफिकेशन)",
+      "severity": "error"
+    },
+    {
+      "id": "executor-singular-verb",
+      "regex": "(Annu|Rajesh|Sunil|राजेश|सुनील|अन्नु)\\s+काम\\s+कर\\s+रहा\\s+है",
+      "message": "Use respectful plural 'काम कर रहे हैं' for named executors, not singular 'काम कर रहा है'",
+      "severity": "error"
+    },
+    {
+      "id": "oblique-case-time-nominative",
+      "regex": "कोई\\s+भी\\s+(वक्त|समय)",
+      "message": "Use oblique case किसी भी वक्त / किसी भी समय, not nominative कोई भी",
+      "severity": "error"
+    },
+    {
+      "id": "grahak-in-install-domain",
+      "regex": "ग्राहक",
+      "scope": ["app/src/main/assets/install_labels_v1.4_hi_en.json", "feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/**"],
+      "message": "Install domain uses कनेक्शन, not ग्राहक — vocab swap rule",
+      "severity": "warn",
+      "exceptions": ["exit.CUSTOMER_CANCELLED"]
+    },
+    {
+      "id": "leading-space-in-hi-value",
+      "regex": "\"hi\"\\s*:\\s*\"\\s+[^\"]",
+      "scope": ["app/src/main/assets/*.json"],
+      "message": "Leading whitespace inside hi value — trim",
+      "severity": "warn"
+    },
+    {
+      "id": "trailing-space-in-hi-value",
+      "regex": "\"hi\"\\s*:\\s*\"[^\"]*\\s\"",
+      "scope": ["app/src/main/assets/*.json"],
+      "message": "Trailing whitespace inside hi value — trim",
+      "severity": "warn"
+    }
+  ],
+
+  "required_patterns": [
+    {
+      "id": "banner-submit-devanagari",
+      "regex": "सेटअप\\s+सबमिट\\s+हुआ",
+      "scope": ["feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/InstallStateBanner.kt", "core/data/src/main/java/com/wiom/csp/core/data/repository/MockTaskRepository.kt"],
+      "message": "INS-1050 banner + timeline must use Devanagari सबमिट",
+      "severity": "error",
+      "allow_unicode_escape": true
+    },
+    {
+      "id": "banner-verify-devanagari-short-matra",
+      "regex": "(सेटअप\\s+वेरिफाई\\s+हो\\s+रहा\\s+है|वेरिफाई\\s+के\\s+लिए\\s+तैयार)",
+      "scope": ["feature/home/src/main/java/com/wiom/csp/feature/home/ui/drilldowns/install/InstallStateBanner.kt"],
+      "message": "INS-1050 / INS-1053 banner must use Devanagari वेरिफाई (short ि)",
+      "severity": "error",
+      "allow_unicode_escape": true
+    }
+  ],
+
+  "_notes": {
+    "allow_unicode_escape": "When checking Kotlin files, the string may appear as Unicode escape sequences (\\u0938\\u0947...) rather than literal Devanagari. If this flag is set, the validator also tries the Unicode-escape form of the pattern."
+  }
+}
