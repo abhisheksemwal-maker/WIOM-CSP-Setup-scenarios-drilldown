@@ -1,4 +1,4 @@
-# CSP APP — Install Flow Visual Spec v1.5.1 (Pratibimb Redesign)
+# CSP APP — Install Flow Visual Spec v1.5.1 (Install Drilldown Redesign)
 
 **Date:** April 15, 2026 (rev 3 — full English UX end-to-end: model dual-field plumbing + morph-chain fix + cross-bundle collision fix)
 **Supersedes:** [`Install_Flow_Visual_Spec_v1.5.md`](https://github.com/wiom-tech/wiom-csp-app-apr09/blob/release-01/docs/features/install-flow/Install_Flow_Visual_Spec_v1.5.md) (April 9, 2026)
@@ -6,7 +6,7 @@
 **Depends on:**
 - Component Registry v1.1 — tokens, card spec (2-line, no CTA), CSP accountability model (§5), accent rules
 - Wiom DS v2 foundations (wiom-cta, wiom-badge, sd-autolayout, sd-text-container, wiom-design-foundations)
-**Brief:** UX Agent Brief — Install Flow v3 (FINAL) + Pratibimb session directive 2026-04-14
+**Brief:** UX Agent Brief — Install Flow v3 (FINAL) + design session directive by Abhishek Semwal 2026-04-14
 **Status:** Draft — pending merge into `wiom-tech/wiom-csp-app-apr09@release-01` via feature PR
 **Replaces:** v1.5 in full. This is a self-contained document — no need to read v1.5 alongside.
 
@@ -16,7 +16,7 @@
 
 | # | Change | Source |
 |---|---|---|
-| 1 | **`InstallStateBanner`** — per-state title/subtitle banner at top of drilldown scroll body (13 variants + icon + bg + accent) | Pratibimb 2026-04-14 |
+| 1 | **`InstallStateBanner`** — per-state title/subtitle banner at top of drilldown scroll body (13 variants + icon + bg + accent) | Design session 2026-04-14 |
 | 2 | **Sticky `WiomCtaBar`** — flat bottom CTA container with 1dp border-top, CTA outside scroll | wiom-cta §5 rule 9 + sd-autolayout §6c |
 | 3 | **`WiomButton`** polymorphic CTA — Primary / Secondary / Tertiary / Destructive with leading/trailing icon slots | wiom-cta + session directive |
 | 4 | **Exit reclassified** as reversible Tertiary in neutral color (not Destructive red). Moved to triple-dot overflow menu for all states **except** `AWAITING_SLOT_PROPOSAL` where it's inline Tertiary below primary | session directive |
@@ -46,7 +46,7 @@
 | 28 | **`WiomLabels.getHi()` / `formatHi()` / `formatEn()` helpers** — explicit-language versions that ignore `currentLang`. Used by morph paths to capture BOTH languages up front. | rev 3 |
 | 29 | **4 UI-chrome keys added** — `drilldown.timeline_header_new` (`{count}`), `drilldown.timeline_see_more` (`{count}`), `cta.change_technician`, `cta.back`. Replaced the last hardcoded Devanagari Unicode escapes in `InstallDrilldownContent.kt` and `ExitReasonSheet.kt`. | rev 3 |
 | 30 | **All 13 install mock seeds populated with English variants** — every `typeLabelEn="Install"`, every `reasonTimerDisplayEn`, every `deadlineDisplayEn`, every timeline `descriptionEn`, every executor `nameEn` ("Annu"/"Rajesh"/"Sunil"). | rev 3 |
-| 31 | **Improvised call icon in ExecutorAssignmentSheet REMOVED** — added during the rev 1 sheet polish with rationale "so CSP can call any team member without leaving the sheet". Not in v1.5 §4.3. Removed after user pushback per the no-improvisation rule. Sheet is now radio + name only. | rev 3 — Abhishek directive + `feedback_pratibimb_no_improvisation.md` |
+| 31 | **Improvised call icon in ExecutorAssignmentSheet REMOVED** — added during the rev 1 sheet polish with rationale "so CSP can call any team member without leaving the sheet". Not in v1.5 §4.3. Removed after user pushback per the no-improvisation rule. Sheet is now radio + name only. | rev 3 — Abhishek directive (no-improvisation rule) |
 | 32 | **Morph-chain `nameEn` plumbing** — `HomeViewModel.onExecutorAssigned` extended with 4th param `executorNameEn: String = ""`. `TaskDrilldownScreen`, `AppNavGraph`, `HomeScreen.ActionSheetRouter` lambdas all updated to pass the English name through. Morph computes `displayHi = formatHi(...)` + `displayEn = formatEn(...)` and sets BOTH `reasonTimerDisplay` AND `reasonTimerDisplayEn`. Sets `ExecutorInfo(..., nameEn = enName)`. Fixes the "Sunil (Hindi) hasn't started the setup yet" post-morph banner bug. | rev 3 |
 | 33 | **Cross-bundle `reason.delegated*` collision fixed** — added 3 install-namespaced keys `install.reason.delegated`, `install.reason.delegated_working`, `install.reason.delegated_overdue` with `{name}` placeholder. `InstallDrilldownContent.kt` status label branch now reads the install-namespaced versions, avoiding runtime shadowing by restore's `reason.delegated*` (which had mismatched placeholder `{name}` vs the install code's `{executor}`, causing silent strip → truncated "Given to " fragment). | rev 3 |
 
