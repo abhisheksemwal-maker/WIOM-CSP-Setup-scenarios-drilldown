@@ -11,7 +11,7 @@
     "banner": {
       "icon": "Schedule",
       "title_hi": "समय चुनना बाकी है",
-      "subtitle_hi": "ग्राहक से दो स्लॉट पूछने हैं",
+      "subtitle_hi": "कनेक्शन से दो स्लॉट पूछने हैं",
       "accent_token": "stateWarning",
       "bg_token": "bgUrgent"
     },
@@ -41,7 +41,7 @@
     "state_enum": "AWAITING_CUSTOMER_SELECTION",
     "banner": {
       "icon": "HourglassBottom",
-      "title_hi": "ग्राहक चुन रहा है",
+      "title_hi": "कनेक्शन चुन रहा है",
       "subtitle_hi": "दो स्लॉट भेजे हैं · जवाब का इंतज़ार",
       "accent_token": "stateInfo",
       "bg_token": "bgInfo"
@@ -231,8 +231,8 @@
     "feed_visibility": "hidden_by_feed_filter",
     "banner": {
       "icon": "Sync",
-      "title_hi": "कनेक्शन ने स्लॉट confirm नहीं किया",
-      "subtitle_hi": "पुराने स्लॉट cancel हुए · CSP कोई काम नहीं",
+      "title_hi": "कनेक्शन ने स्लॉट कन्फर्म नहीं किया",
+      "subtitle_hi": "पुराने स्लॉट कैंसल हुए · CSP कोई काम नहीं",
       "accent_token": "stateInfo",
       "bg_token": "bgInfo"
     },

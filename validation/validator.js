@@ -206,8 +206,12 @@ function runLayer1() {
       if (scope && !scope.some(pat => matchesGlob(relFile, pat))) continue;
       const content = fs.readFileSync(file, 'utf8');
       const lines = content.split('\n');
+      const isKotlin = relFile.endsWith('.kt');
       lines.forEach((line, idx) => {
-        if (regex.test(line)) {
+        // Strip // line comments from Kotlin source before scanning so copy
+        // rules don't fire on trailing-comment glosses of Devanagari strings.
+        const scanLine = isKotlin ? line.replace(/\/\/.*$/, '') : line;
+        if (regex.test(scanLine)) {
           const bucket = rule.severity === 'warn' ? layer.warnings : layer.errors;
           bucket.push(`[layer1][${rule.id}] ${relFile}:${idx + 1} — ${rule.message}`);
         }
