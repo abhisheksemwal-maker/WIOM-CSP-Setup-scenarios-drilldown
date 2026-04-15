@@ -34,12 +34,18 @@ A physical Android phone with USB debugging enabled, or an emulator image runnin
 ## 2. Checkout
 
 ```bash
-git clone https://github.com/ashishagrawal-iam/wiom-csp-app-apr09.git
+git clone https://github.com/wiom-tech/wiom-csp-app-apr09.git
 cd wiom-csp-app-apr09
-git checkout release-01-Design
+git checkout release-01
 ```
 
-The `release-01-Design` branch is the manager's working branch — there is no `main` on the remote.
+`release-01` is the base branch PRs merge into. There is no `main` on the remote. For the Pratibimb redesign work, cut a new branch from `release-01`:
+
+```bash
+git checkout -b redesign/pratibimb-install-drilldown release-01
+```
+
+Push the redesign work to this branch and open a PR against `release-01` for approval.
 
 ---
 

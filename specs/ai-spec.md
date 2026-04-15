@@ -8,7 +8,7 @@ This file is written *for an AI coding agent* that picks up this repo in a futur
 
 You are continuing the Pratibimb design-mode redesign of the Wiom CSP (Customer Setup Partner) Android app. Specifically, you are polishing the **install drilldown** across 13 lifecycle states in a parallel `redesign` product flavor that installs side-by-side with the baseline `staging` APK.
 
-Source repo: **`ashishagrawal-iam/wiom-csp-app-apr09`** (branch `release-01-Design`).
+Source repo: **`wiom-tech/wiom-csp-app-apr09`** (base branch `release-01`). Redesign branches are cut from `release-01` and PRs target `release-01` for approval.
 Docs repo (this one): **`abhisheksemwal-maker/WIOM-CSP-Setup-scenarios-drilldown`**.
 
 All 13 install states are at v1.0 as of 2026-04-14. The remaining work is:
@@ -125,7 +125,7 @@ Skip step 4 only when the user explicitly says so.
 2. Read `MEMORY.md` and any `feedback_*.md` files referenced
 3. Offer to continue the last session (per user preference)
 4. Run `git log -5 --oneline` in the source repo to see what's recent
-5. Check `gh pr list` for open PRs targeting `release-01-Design`
+5. Check `gh pr list` for open PRs targeting `release-01` on `wiom-tech/wiom-csp-app-apr09`
 6. Wait for the user's direction before making changes
 
 ---

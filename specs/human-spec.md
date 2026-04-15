@@ -23,7 +23,7 @@ The redesign focuses on **one surface only**: the install drilldown, across all 
 
 ## The 8-PR merge plan
 
-If and when the manager decides to land the redesign into `release-01-Design`, the changes are split into 8 reviewable PRs. Each PR is independently reviewable and leaves the app working.
+If and when the manager decides to land the redesign into `wiom-tech/wiom-csp-app-apr09@release-01`, the changes are split into 8 reviewable PRs. Each PR is independently reviewable and leaves the app working. All PRs cut a feature branch from `release-01` and target `release-01`.
 
 | PR | Scope | Files touched (approx) |
 |---|---|---|

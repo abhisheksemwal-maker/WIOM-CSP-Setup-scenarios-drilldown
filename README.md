@@ -73,7 +73,9 @@ The Wiom CSP (Customer Setup Partner) app is an Android Jetpack Compose app that
 
 ## Where the source lives
 
-The Android source code lives in a separate repository: **`ashishagrawal-iam/wiom-csp-app-apr09`** (branch `release-01-Design`). This repo here is documentation and specs only. The [`build/README.md`](build/README.md) explains how to check out the source repo and produce the `.apk`.
+The Android source code lives in a separate repository: **`wiom-tech/wiom-csp-app-apr09`** (base branch `release-01`). This repo here is documentation and specs only. The [`build/README.md`](build/README.md) explains how to check out the source repo and produce the `.apk`.
+
+Merge flow: a redesign branch is cut from `wiom-tech/wiom-csp-app-apr09@release-01`, the Pratibimb changes are pushed to it, and a PR is opened against `release-01` for approval before merge.
 
 ---
 

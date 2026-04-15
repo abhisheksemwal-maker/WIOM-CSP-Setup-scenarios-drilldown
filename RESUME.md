@@ -22,7 +22,7 @@ Context load order:
 Current state:
 - All 13 install lifecycle states polished to v1.0 in the `redesign` product flavor
 - APK builds via: ./gradlew :app:assembleRedesignDebug
-- Source repo: ashishagrawal-iam/wiom-csp-app-apr09, branch release-01-Design
+- Source repo: wiom-tech/wiom-csp-app-apr09, base branch release-01 (cut feature branches from here; PRs target release-01 for approval)
 - Build output: app/build/outputs/apk/redesign/debug/app-redesign-debug.apk
 - Parallel install: com.wiom.csp.redesign (side-by-side with com.wiom.csp.staging)
 
