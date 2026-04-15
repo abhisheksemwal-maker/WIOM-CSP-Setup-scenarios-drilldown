@@ -1,6 +1,6 @@
 # CSP APP — Install Flow Visual Spec v1.5.1 (Pratibimb Redesign)
 
-**Date:** April 15, 2026 (rev 2 — English audit + banner JSON migration + debug panel language toggle)
+**Date:** April 15, 2026 (rev 3 — full English UX end-to-end: model dual-field plumbing + morph-chain fix + cross-bundle collision fix)
 **Supersedes:** [`Install_Flow_Visual_Spec_v1.5.md`](https://github.com/wiom-tech/wiom-csp-app-apr09/blob/release-01/docs/features/install-flow/Install_Flow_Visual_Spec_v1.5.md) (April 9, 2026)
 **Surface:** Install Flow (assignment → scheduling → dispatch → delegation → work module → verification → closure)
 **Depends on:**
@@ -41,6 +41,14 @@
 | 23 | **`executor.title` in install bundle DELETED** — was shadowed by restore bundle's `"Who will fix?"` via alphabetical flat-merge. Install code must only use `executor.install.title` (= "Who will work on this setup?"). | Cross-bundle collision fix + audit |
 | 24 | **`cta.dispatch` = "Start"** — no more `"Start / Dispatch"` placeholder. | Audit grammar fix |
 | 25 | **Debug panel Language toggle** — `WiomLabels.currentLang` persisted via SharedPreferences, flipped from HomeDebugScreen via FilterChip + `Activity.recreate()`. Default `LANG_HI`, user can switch to `LANG_EN` on device to audit English UX live. | Abhishek directive 2026-04-15 |
+| 26 | **Data model dual-field for i18n** — `TaskDetail.typeLabelEn`, `reasonTimerDisplayEn`, `deadlineDisplayEn`; `ExecutorInfo.nameEn`; `TimelineEventInfo.descriptionEn` + `timestampEn`. All default `""` so existing code compiles unchanged. | rev 3 — Abhishek "nothing hardcoded" directive |
+| 27 | **`WiomLabels.pick(hi, en)` helper** — language-aware picker used at render time in every composable that displays dynamic task-level strings. Falls back to the other language if the active-language variant is empty. | rev 3 |
+| 28 | **`WiomLabels.getHi()` / `formatHi()` / `formatEn()` helpers** — explicit-language versions that ignore `currentLang`. Used by morph paths to capture BOTH languages up front. | rev 3 |
+| 29 | **4 UI-chrome keys added** — `drilldown.timeline_header_new` (`{count}`), `drilldown.timeline_see_more` (`{count}`), `cta.change_technician`, `cta.back`. Replaced the last hardcoded Devanagari Unicode escapes in `InstallDrilldownContent.kt` and `ExitReasonSheet.kt`. | rev 3 |
+| 30 | **All 13 install mock seeds populated with English variants** — every `typeLabelEn="Install"`, every `reasonTimerDisplayEn`, every `deadlineDisplayEn`, every timeline `descriptionEn`, every executor `nameEn` ("Annu"/"Rajesh"/"Sunil"). | rev 3 |
+| 31 | **Improvised call icon in ExecutorAssignmentSheet REMOVED** — added during the rev 1 sheet polish with rationale "so CSP can call any team member without leaving the sheet". Not in v1.5 §4.3. Removed after user pushback per the no-improvisation rule. Sheet is now radio + name only. | rev 3 — Abhishek directive + `feedback_pratibimb_no_improvisation.md` |
+| 32 | **Morph-chain `nameEn` plumbing** — `HomeViewModel.onExecutorAssigned` extended with 4th param `executorNameEn: String = ""`. `TaskDrilldownScreen`, `AppNavGraph`, `HomeScreen.ActionSheetRouter` lambdas all updated to pass the English name through. Morph computes `displayHi = formatHi(...)` + `displayEn = formatEn(...)` and sets BOTH `reasonTimerDisplay` AND `reasonTimerDisplayEn`. Sets `ExecutorInfo(..., nameEn = enName)`. Fixes the "Sunil (Hindi) hasn't started the setup yet" post-morph banner bug. | rev 3 |
+| 33 | **Cross-bundle `reason.delegated*` collision fixed** — added 3 install-namespaced keys `install.reason.delegated`, `install.reason.delegated_working`, `install.reason.delegated_overdue` with `{name}` placeholder. `InstallDrilldownContent.kt` status label branch now reads the install-namespaced versions, avoiding runtime shadowing by restore's `reason.delegated*` (which had mismatched placeholder `{name}` vs the install code's `{executor}`, causing silent strip → truncated "Given to " fragment). | rev 3 |
 
 Plus all v1.4 → v1.5 changes still apply (card = 2 lines + no CTA, badge on line 2, delegation states, end transition unification, RESOLVED no auto-dismiss, CSP accountability model).
 
