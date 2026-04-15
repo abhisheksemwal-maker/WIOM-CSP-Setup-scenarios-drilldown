@@ -1,6 +1,6 @@
-# Design System — Components (redesign flavor)
+# Design System — Components
 
-This doc describes the new component layer added in `core:common` as part of the Pratibimb DS redesign. All components are forked by `WiomDsMode.isRedesign` where their staging equivalents differ.
+This doc describes the new component layer added in `core:common` as part of the install drilldown redesign that landed in v1.5.1. The components below are the single baseline going forward — there is no longer a separate staging path.
 
 ---
 

@@ -1137,11 +1137,11 @@ v1.5 had 15 validation checks. v1.5.1 adds 13 more. All 28 are automated via the
 
 ## 14. Design Token Reference
 
-Quick lookup for every token referenced anywhere in this spec. All values come from `core/common/src/main/java/com/wiom/csp/core/common/theme/WiomTokens.kt`. Tokens with getter-based forks read from `WiomDsMode.isRedesign` — the redesign hex is shown.
+Quick lookup for every token referenced anywhere in this spec. All values come from `core/common/src/main/java/com/wiom/csp/core/common/theme/WiomTokens.kt`. v1.5.1 promotes the wiom-design-foundations skill values to the single baseline — there is no longer a fork between baseline and redesign.
 
 ### 14.1 Color tokens
 
-| Token | Redesign hex | Used by |
+| Token | Hex | Used by |
 |---|---|---|
 | `WiomColors.brandPrimary` | #D9008D | Primary CTA bg, brand chevrons |
 | `WiomColors.textPrimary` | #161021 | Primary text, neutral button text, exit link |
@@ -1167,7 +1167,7 @@ Quick lookup for every token referenced anywhere in this spec. All values come f
 | Token | Size / weight / LH | Used by |
 |---|---|---|
 | `WiomTextStyle.cardIdentity` | 14sp SemiBold / 24sp | Banner title, section headers, card identity |
-| `WiomTextStyle.cta` | 16sp SemiBold (redesign) / 24sp LH | `WiomButton` text |
+| `WiomTextStyle.cta` | 16sp SemiBold / 24sp LH | `WiomButton` text |
 | `WiomTextStyle.reasonTimer` | 14sp SemiBold / 24sp | Deadline pill, reason lines |
 | `WiomTextStyle.reasonTimerOverdue` | 14sp Bold / 24sp | Overdue variants |
 | `WiomTextStyle.body` | 14sp Regular / 24sp | Drilldown body text |
@@ -1178,7 +1178,7 @@ Quick lookup for every token referenced anywhere in this spec. All values come f
 
 ### 14.3 Spacing tokens
 
-| Token | Value (redesign) | Used by |
+| Token | Value | Used by |
 |---|---|---|
 | `WiomSpacing.xs` | 4dp | Icon-text inline |
 | `WiomSpacing.sm` | 8dp | Inter-chip, icon-text in banner, inter-button gap in CTA bar |
@@ -1191,7 +1191,7 @@ Quick lookup for every token referenced anywhere in this spec. All values come f
 
 ### 14.4 Radius tokens
 
-| Token | Value (redesign) | Used by |
+| Token | Value | Used by |
 |---|---|---|
 | `WiomRadius.tiny` | 4dp | Slot status chip |
 | `WiomRadius.chip` | 8dp | Assurance chips, small status chips |
@@ -1201,7 +1201,7 @@ Quick lookup for every token referenced anywhere in this spec. All values come f
 
 ### 14.5 Elevation tokens
 
-| Token | Value (redesign) | Used by |
+| Token | Value | Used by |
 |---|---|---|
 | `WiomElevation.cardBorderWidth` | 1dp | All card borders, CTA bar top border |
 | `WiomElevation.accentBorderWidth` | 4dp | Left accent stripe on cards (timer-driven) |
@@ -1312,7 +1312,7 @@ Mock repo already has the task by id — the navigation graph resolves it and re
 - `installStateFilter` wires into `MockTaskRepository.buildTaskFeed()` via `HomeDebugConfig`
 - `showGapStates` controls whether `SCHEDULING_FAILED` (and future `ASSIGNED`, `RECONFIRMATION_PENDING`, `SCHEDULED.isSlotDay=false`) are included in feed output
 - Quick-jump buttons bypass `buildTaskFeed()` entirely — they construct the drilldown navigation directly
-- Debug panel is only accessible via the `Wiom CSP DS` redesign flavor header debug button; not shipped to production
+- Debug panel remains debug-build-only (gated by `BuildConfig.DEBUG`); not shipped to production
 
 ---
 
@@ -1325,7 +1325,6 @@ Files the feature PR may touch (enforced by [`/validation/scope-allowlist.txt`](
 ```
 app/build.gradle.kts
 app/src/main/java/com/wiom/csp/WiomCspApplication.kt
-app/src/redesign/**
 app/src/staging/res/**
 app/src/main/java/com/wiom/csp/navigation/AppNavGraph.kt
 app/src/main/assets/install_labels_v1.4_hi_en.json
@@ -1335,7 +1334,6 @@ app/src/main/assets/wallet_labels_v1.2_hi_en.json
 app/src/main/assets/home_labels_hi_en.json
 app/src/main/assets/assurance_strip_labels_v1.0_hi_en.json
 core/common/src/main/java/com/wiom/csp/core/common/theme/WiomTokens.kt
-core/common/src/main/java/com/wiom/csp/core/common/theme/WiomDsMode.kt
 core/common/src/main/java/com/wiom/csp/core/common/composables/WiomButton.kt
 core/common/src/main/java/com/wiom/csp/core/common/composables/WiomBadge.kt
 core/common/src/main/java/com/wiom/csp/core/common/composables/WiomHeader.kt

@@ -1,20 +1,6 @@
 # Design System — Tokens
 
-This is the authoritative list of DS tokens used by the Wiom CSP redesign flavor. Tokens live in `core/common/src/main/java/com/wiom/csp/core/common/theme/WiomTokens.kt` with getter-based forks gated on `WiomDsMode.isRedesign`.
-
----
-
-## Token fork mechanism
-
-```kotlin
-object WiomColors {
-    val stateSuccess: Color
-        get() = if (WiomDsMode.isRedesign) Color(0xFF008043) else Color(0xFF1A7F37)
-    // ... etc
-}
-```
-
-Every design value that differs between staging and redesign uses this pattern — no compile-time branching, no duplicate files. The runtime flag is set once in `WiomCspApplication.onCreate()`.
+This is the authoritative list of DS tokens used by the Wiom CSP app. Tokens live in `core/common/src/main/java/com/wiom/csp/core/common/theme/WiomTokens.kt` as direct constants — the wiom-design-foundations skill values are now the single baseline (no flavor fork).
 
 ---
 
@@ -133,12 +119,12 @@ The redesign prefers **flat surfaces + 1dp borders** over drop shadows where pos
 
 ---
 
-## Where the forks apply
+## v1.5.1 changes vs the prior baseline
 
 In `WiomTokens.kt`:
-- `stateSuccess` / `stateError` / `stateWarning` / `stateInfo` — all 4 flipped
-- `heroAmount`, `metaXs` — added (new in redesign)
+- `stateSuccess` / `stateError` / `stateWarning` / `stateInfo` — all 4 aligned to the wiom-design-foundations skill values
+- `heroAmount`, `metaXs` — added (new in v1.5.1)
 - `radiusSmall` 6dp → 8dp
 - Button font weight Bold → SemiBold
 
-Pre-redesign values are preserved in the `else` branch of each getter so the staging build remains unchanged.
+The prior values are preserved in git history on `release-01` pre-`84bccd6`. There is no longer a runtime flag — these are the single baseline going forward.

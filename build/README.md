@@ -51,31 +51,27 @@ Push the redesign work to this branch and open a PR against `release-01` for app
 
 ## 3. Product flavors
 
-The `app` module has two product flavors defined in `app/build.gradle.kts`:
+The `app` module has three product flavors defined in `app/build.gradle.kts`, all sharing one environment dimension:
 
-| Flavor | applicationId | app_name | Purpose |
-|---|---|---|---|
-| `staging` | `com.wiom.csp.staging` | `Wiom CSP 04-14` | Baseline build the manager reviews |
-| `redesign` | `com.wiom.csp.redesign` | `Wiom CSP DS` | Pratibimb redesign — installs side-by-side |
+| Flavor | applicationId | Purpose |
+|---|---|---|
+| `staging` | `com.wiom.csp.staging` | QA gateway, real backend, `Wiom CSP 04-14` app name |
+| `prod` | `com.wiom.csp` | Production gateway |
+| `mock` | `com.wiom.csp.staging` | Same package as staging, mock data via `BuildConfig.ENVIRONMENT == "mock"` |
 
-The `redesign` flavor sets `applicationIdSuffix = ".redesign"` so both APKs co-exist on the same device without overwriting each other. A runtime flag `WiomDsMode.isRedesign` is flipped in `WiomCspApplication.onCreate()` based on `BuildConfig.FLAVOR`. All token forks and component forks check that flag.
+The install drilldown redesign that landed in v1.5.1 is **the single baseline** for all flavors — there is no runtime token fork, no separate redesign flavor, no parallel APK.
 
 ---
 
-## 4. Build the redesign APK
+## 4. Build the staging APK
 
 ```bash
-./gradlew :app:assembleRedesignDebug
+./gradlew :app:assembleStagingDebug
 ```
 
 Output path:
 ```
-app/build/outputs/apk/redesign/debug/app-redesign-debug.apk
-```
-
-For the staging APK:
-```bash
-./gradlew :app:assembleStagingDebug
+app/build/outputs/apk/staging/debug/app-staging-debug.apk
 ```
 
 ---
@@ -83,7 +79,7 @@ For the staging APK:
 ## 5. Install
 
 ```bash
-adb install -r app/build/outputs/apk/redesign/debug/app-redesign-debug.apk
+adb install -r app/build/outputs/apk/staging/debug/app-staging-debug.apk
 ```
 
 The `-r` flag replaces an existing install of the same flavor without uninstalling first.
@@ -91,8 +87,8 @@ The `-r` flag replaces an existing install of the same flavor without uninstalli
 ### Launch the app
 
 ```bash
-adb shell am force-stop com.wiom.csp.redesign
-adb shell monkey -p com.wiom.csp.redesign -c android.intent.category.LAUNCHER 1
+adb shell am force-stop com.wiom.csp.staging
+adb shell monkey -p com.wiom.csp.staging -c android.intent.category.LAUNCHER 1
 ```
 
 ---
@@ -163,5 +159,5 @@ If you see stale resources or weird crashes:
 ```bash
 ./gradlew clean
 rm -rf ~/.gradle/caches/transforms-*
-./gradlew :app:assembleRedesignDebug
+./gradlew :app:assembleStagingDebug
 ```

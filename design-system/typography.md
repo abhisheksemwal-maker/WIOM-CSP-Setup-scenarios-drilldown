@@ -27,7 +27,7 @@ When creating TextStyle, always check with `figma.listAvailableFontsAsync()` or 
 
 ---
 
-## Type scale (redesign flavor)
+## Type scale
 
 | Style | Size | Weight | Family preferences | Use |
 |---|---|---|---|---|
@@ -41,7 +41,7 @@ When creating TextStyle, always check with `figma.listAvailableFontsAsync()` or 
 | `label` | 12sp | SemiBold | Auto | CTA text, chip text |
 | `metaXs` | 10sp | Regular | Auto | Badge counts, version strings |
 
-### Redesign-flavor deltas vs staging
+### v1.5.1 changes vs the prior baseline
 
 - `titleMd` dropped from Bold → **SemiBold** (readability at small sizes)
 - `heroAmount` added (new)

@@ -6,15 +6,13 @@
 # Glob syntax: `dir/**` means any file under dir (recursive); `dir/*` means
 # direct children only; exact paths match literally.
 
-# ── Build + flavor setup ──
+# ── Build + app entry ──
 app/build.gradle.kts
 app/src/main/java/com/wiom/csp/WiomCspApplication.kt
-app/src/redesign/**
 app/src/staging/res/**
 
 # ── DS tokens + new components ──
 core/common/src/main/java/com/wiom/csp/core/common/theme/WiomTokens.kt
-core/common/src/main/java/com/wiom/csp/core/common/theme/WiomDsMode.kt
 core/common/src/main/java/com/wiom/csp/core/common/composables/WiomButton.kt
 core/common/src/main/java/com/wiom/csp/core/common/composables/WiomBadge.kt
 core/common/src/main/java/com/wiom/csp/core/common/composables/WiomHeader.kt

@@ -20,11 +20,11 @@ Context load order:
 6. Read /ux-copy/changelog.md for the session-wide rules
 
 Current state:
-- All 13 install lifecycle states polished to v1.0 in the `redesign` product flavor
-- APK builds via: ./gradlew :app:assembleRedesignDebug
+- All 13 install lifecycle states polished to v1.0 — landed as the single baseline in v1.5.1 (no flavor fork)
+- APK builds via: ./gradlew :app:assembleStagingDebug
 - Source repo: wiom-tech/wiom-csp-app-apr09, base branch release-01 (cut feature branches from here; PRs target release-01 for approval)
-- Build output: app/build/outputs/apk/redesign/debug/app-redesign-debug.apk
-- Parallel install: com.wiom.csp.redesign (side-by-side with com.wiom.csp.staging)
+- Build output: app/build/outputs/apk/staging/debug/app-staging-debug.apk
+- Install package: com.wiom.csp.staging (the redesign content lives in the regular staging build)
 
 Outstanding loose ends (pick one):
 1. Device screenshot verification for INS-1050 / INS-1053 differentiation (highest priority)
