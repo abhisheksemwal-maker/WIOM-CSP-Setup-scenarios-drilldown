@@ -75,10 +75,19 @@ The Wiom CSP (Customer Setup Partner) app is an Android Jetpack Compose app that
 
 The Android source code lives in a separate repository: **`wiom-tech/wiom-csp-app-apr09`** (base branch `release-01`). This repo here is documentation and specs only. The [`build/README.md`](build/README.md) explains how to check out the source repo and produce the `.apk`.
 
-Merge flow: a redesign branch is cut from `wiom-tech/wiom-csp-app-apr09@release-01`, the Pratibimb changes are pushed to it, and a PR is opened against `release-01` for approval before merge.
+## Upstream PR
+
+**OPEN:** https://github.com/wiom-tech/wiom-csp-app-apr09/pull/34
+
+- Branch: `redesign/install-drilldown-v1.5.1`
+- Base: `release-01`
+- Title: `feat(install-flow): Install Drilldown Redesign v1.5.1 — debug panel + full i18n`
+- 43 files, +3360 / −527 lines
+- Author: Abhishek Semwal (Design & Product, Wiom)
+- Awaiting manager review
 
 ---
 
 ## Last updated
 
-2026-04-14 (end of Pratibimb session that completed all 13 install state drilldown polish).
+2026-04-15 (design session complete — all 13 install state drilldowns polished + PR #34 open against upstream).
